@@ -2,11 +2,21 @@ const find = () => {
     const searchField = document.getElementById("search-field");
     const searchText = searchField.value;
     fetch(`https://openapi.programming-hero.com/api/phones?search=${searchText}`)
-        .then(res => res.json()).then(data => searchResult(data.data));
+        .then(res => res.json()).then(data => searchResult(data.data.slice(0,20)));
 }
+
+document.querySelector("#loadMore-btn").addEventListener('click', () => {
+    // document.querySelector("#loadMore-btn").classList.toggle('d-none');
+    const searchField = document.getElementById("search-field");
+    const searchText = searchField.value;
+    fetch(`https://openapi.programming-hero.com/api/phones?search=${searchText}`)
+        .then(res => res.json()).then(data => searchResult(data.data));
+})
 const searchResult = (data) => {
-    console.log(data);
+    console.log(data)
     const searchResultDiv = document.getElementById("search-result");
+    console.log(document.querySelector("#loadMore-btn"));
+    document.querySelector("#loadMore-btn").classList.toggle('d-none');
     searchResultDiv.innerHTML = "";
     data.forEach(singleResult => {
         searchResultDiv.innerHTML += `
@@ -28,13 +38,14 @@ const searchResult = (data) => {
     })
 
 }
-const fetchDetails = (id) =>{
+const fetchDetails = (id) => {
     fetch(`https://openapi.programming-hero.com/api/phone/${id}`)
-    .then(res => res.json())
-    .then(data => displayDetails(data.data))
+        .then(res => res.json())
+        .then(data => displayDetails(data.data))
 }
-const displayDetails = (data)=>{
-    let others= data.others;
+const displayDetails = (data) => {
+
+    let others = data.others;
     const detailsDiv = document.getElementById("phone-details");
     let text = ""
     detailsDiv.innerHTML = `
